@@ -17,7 +17,11 @@ npm run dev
 # build for production with minification
 npm run build
 
+modify API_ROOT to your backend server url in prod.env.js
+
+modify assetsPublicPath to your project dir in config/index.js ,
+
 ## Config
 
 config file path is src/assets/js/config.js  
-
+ 
