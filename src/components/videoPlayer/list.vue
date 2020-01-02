@@ -37,7 +37,7 @@
                 </el-transfer>
                 <div class="action-area">
                     <div class="left-area">
-                        <img src="static/imgs/player.png" :class="{imgRotate: isPlay}" alt="" style="width:40px">
+                        <img src="@/assets/imgs/play.png" :class="{imgRotate: isPlay}" alt="" style="width:40px">
                         <el-tooltip :content="palyVideoName" placement="top">
                             <p class="m-t-5 c-primary">{{palyVideoName}}</p>
                         </el-tooltip>
@@ -300,7 +300,7 @@ import { clearInterval } from 'timers';
                 this.curVolume= 0;
                 //120s/0s play duration
                 this.curposition= 0;
-                this.duration= 120;
+                this.duration= 0;
                 this.palyVideoName= "";
             },
 
@@ -508,8 +508,11 @@ import { clearInterval } from 'timers';
                     handleResponse(obj, (res) => {
                         if(res.status === "CHANGED"){
                             this.$swal("", "Success", "success").then(() => {
-                                this.getVideoList();
-                                this.getVideoStatus();
+                                window.setTimeout(() => {
+                                    this.getVideoList();
+                                    this.getVideoStatus();
+                                }, 1000)
+                                
                             })
                             
                         }else{
@@ -529,8 +532,8 @@ import { clearInterval } from 'timers';
                     handleResponse(obj, (res) => {
                         if(res.status === "CHANGED"){
                             this.$swal("", "Success", "success").then(() => {
-                                this.getVideoList();
-                                this.getVideoStatus();
+                                window.clearInterval(this.timer);
+                                this.initVideoData();
                             })
                         }else{
                             _g.handleError(res);

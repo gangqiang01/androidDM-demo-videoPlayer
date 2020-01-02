@@ -16,7 +16,7 @@
 
     .nav-header{
         background: $lightgray-color;
-        border-bottom: 3px solid $purple-color;
+        border-bottom: 3px solid $androidDM-color;
         display: -webkit-flex;
         display: flex;
         flex-flow: row nowrap;

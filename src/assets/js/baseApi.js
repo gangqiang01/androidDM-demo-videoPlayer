@@ -50,6 +50,9 @@ axios.interceptors.request.use((config) => {
 //         return Promise.reject(error.response)  // return error
 //     });
 
+const baseURL = process.env.NODE_ENV == "development"?"" : process.env.API_ROOT;
+axios.defaults.baseURL = baseURL;
+
 let apiGet = function(url, object, config) {
     let geturl, fconfig;
     if(config == undefined){
