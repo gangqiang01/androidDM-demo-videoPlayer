@@ -1,5 +1,5 @@
 <template>
-    <div class="cf m-t-30">
+    <div class="cf m-t-30 p-10" v-loading="contentLoading">
         <el-row >
             <el-col :lg="4" :md="5" :offset="3">
                 <select-group 
@@ -131,6 +131,7 @@
 
                 .action{
                     flex: 0 0 80px;
+                    margin-left: 10px;
                     i{
                         margin-left: 5px;
                         cursor: pointer;
@@ -262,7 +263,8 @@ import { clearInterval } from 'timers';
                     setVolume: "set_volume"
                 },
 
-                timer: null
+                timer: null,
+                contentLoading: false
             }
         },
         components:{
@@ -329,11 +331,11 @@ import { clearInterval } from 'timers';
                 let data= {
                     appname: this.pkgname,
                     funcid: funcid,
-                    param: "test"
+                    param: ""
                 }
                 getDeviceVideoStatus(this.selectedAgentId, this.getTarget, data).then((obj) => {
                     handleResponse(obj, (res) => {
-                        console.log(res);
+
                         if(res.status === "CONTENT"){
                             let videoObj = JSON.parse(res.content.value);
                             if(videoObj.errcode == 0){
@@ -382,11 +384,10 @@ import { clearInterval } from 'timers';
                                         this.percentage = (curposition/duration)*100;
                                         this.curposition = Math.round(curposition/1000);
                                         this.duration = Math.round(duration/1000);
-                                        
                                         this.palyVideoName = videoObj.data.videoname;
                                         break;
                                     default:
-                                        console.error("funcId not support")
+                                        console.error("funcId not support");
                                 }
                             }else{
                                 console.error("[getDeviceVideoStatus]"+this.funcIds+"#errcode:"+videoObj.errcode);
@@ -424,18 +425,34 @@ import { clearInterval } from 'timers';
                 }
 
                 setDeviceVideoStatus(this.selectedAgentId, this.setTarget, data).then((obj) => {
-
+                    this.contentLoading = false;
                     handleResponse(obj, (res) => {
 
                         if(res.status === "CHANGED"){
-                            if(funcId === this.funcIds.setPause){
-                                window.clearInterval(this.timer);
-                                this.timer = null;
-                                this.getVideoStatus();
-                            }else if(funcId === this.funcIds.setVolume){
-                                this.getVideoVolume();
-                            }else{
-                                this.getVideoStatus();
+                            switch(funcId){
+                                case this.funcIds.setPause:
+                                    window.clearInterval(this.timer);
+                                    this.timer = null;
+                                    this.$swal("", "Success", "success").then(() => {
+                                        this.getVideoStatus();
+                                    })
+                                break;
+                                case this.funcIds.setStart:
+                                    this.$swal("", "Success", "success").then(() => {
+                                        this.getVideoStatus();
+                                    })
+                                break;
+                                case this.funcIds.setRestart:
+                                    this.$swal("", "Success", "success").then(() => {
+                                        this.getVideoStatus();
+                                    })
+                                break;
+                                case this.funcIds.setVolume:
+                                    this.getVideoVolume();
+                                break;
+                                default:
+                                    console.error("funcId not support")
+                                
                             }
                         }else{
                             _g.handleError(res); 
@@ -451,6 +468,7 @@ import { clearInterval } from 'timers';
                     funcid: this.funcIds.setPause,
                     param: ""
                 }
+                this.contentLoading = true;
                 this.setDeviceVideoStatus(data, this.funcIds.setPause);
             },
 
@@ -467,6 +485,7 @@ import { clearInterval } from 'timers';
                     funcid: this.funcIds.setStart,
                     param: playlistString
                 }
+                this.contentLoading = true;
                 this.setDeviceVideoStatus(data, this.funcIds.setStart);
             },
 
@@ -482,6 +501,7 @@ import { clearInterval } from 'timers';
                     funcid: this.funcIds.setRestart,
                     param: playlistString
                 }
+                this.contentLoading = true;
                 this.setDeviceVideoStatus(data, this.funcIds.setRestart);
             },
             setDeviceVideoVolume(){
@@ -495,7 +515,7 @@ import { clearInterval } from 'timers';
                     funcid: this.funcIds.setVolume,
                     param: this.curVolume
                 }
-                this.setDeviceVideoStatus(data, this.funcIds.setRestart);
+                this.setDeviceVideoStatus(data, this.funcIds.setVolume);
             },
 
             startVideoApp(){
@@ -503,8 +523,9 @@ import { clearInterval } from 'timers';
                     console.error("selectAgentId is empty");
                     return;
                 }
-
+                this.contentLoading = true;
                 setDeviceStatus(this.selectedAgentId, appControl.setKiosk, this.pkgname).then((obj) => {
+                    this.contentLoading = false;
                     handleResponse(obj, (res) => {
                         if(res.status === "CHANGED"){
                             this.$swal("", "Success", "success").then(() => {
@@ -526,13 +547,14 @@ import { clearInterval } from 'timers';
                     console.error("selectAgentId is empty");
                     return;
                 }
-
+                this.contentLoading = true;
                 setDeviceStatus(this.selectedAgentId, appControl.cancelKiosk, this.pkgname).then((obj) => {
-
+                    this.contentLoading = false;
                     handleResponse(obj, (res) => {
                         if(res.status === "CHANGED"){
+                            window.clearInterval(this.timer);
+                            this.timer = null;
                             this.$swal("", "Success", "success").then(() => {
-                                window.clearInterval(this.timer);
                                 this.initVideoData();
                             })
                         }else{
