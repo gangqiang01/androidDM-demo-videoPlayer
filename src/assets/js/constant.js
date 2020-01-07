@@ -30,6 +30,11 @@ const BATCH_WL_TYPE = "wlbt";
 const BATCH_FILE_TYPE = "fdbt";
 const SINGLE_FILE_TYPE = "fdsg";
 
+//set server api host
+const IP = window.location.hostname;
+const PORT ="8080";
+const PROTOCOL = "http://";
+
 
 export {
     APPLICATIONTITLE as applicationTitle,
@@ -45,5 +50,9 @@ export {
 
     BOOTANIMATIONTYPE as bootanimationType,
     FILETYPE as fileType,
-    FILEFORMAT as fileFormat
+    FILEFORMAT as fileFormat,
+
+    IP as ip,
+    PORT as port,
+    PROTOCOL as protocol
 }

@@ -2,13 +2,13 @@
     <div class="m-t-30 m-r-10" v-show="isSingleMode">
         <div class="text-center m-t-80">
             <i class="fa fa-tablet fa-5x  m-b-10 c-primary" ></i>
-            <p>{{$t('common.deviceList')}}</p>
+            <p>Device List</p>
             <el-select v-model="devValue" ref="devId" class="m-t-10" size="small" filterable>
                  <el-option-group
                     v-for="group in deviceOptions"
                     :key="group.label"
                     :label="group.label"
-                    :disabled="group.label == $t('common.offline')&& isDisabledOffDev"
+                    :disabled="group.label == 'Offline'&& isDisabledOffDev"
                     >
                     <el-option
                         v-for="item in group.options"
@@ -102,7 +102,7 @@
                                         this.devValue = defaultDeviceAgent;
                                     }
                                 })
-                                this.deviceOptions = [{label: this.$t('common.online'), options: onlineDevices}, {label: this.$t('common.offline'), options: offlineDevices}];
+                                this.deviceOptions = [{label: "Online", options: onlineDevices}, {label: "Offline", options: offlineDevices}];
                             }
                         }else{
                             console.error("select-device:data is not array")

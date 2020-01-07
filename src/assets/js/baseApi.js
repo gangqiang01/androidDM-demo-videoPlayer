@@ -1,7 +1,11 @@
 import axios from 'axios'
 import Qs from "qs"
-import router from '../../router'
-import swal from 'sweetalert'
+import {
+    getSession,
+    checkSession,
+} from "./storage";
+
+import {ip, port, protocol} from "./constant"
 
 let cancelArr = [];
 //intercept axios api 
@@ -25,32 +29,9 @@ axios.interceptors.request.use((config) => {
  }, function (err){
     return Promise.reject(err);
  });
+let url = protocol+ ip+":"+ port;
 
-// axios.interceptors.response.use(
-//     response => {
-//         return response;
-//     },
-//     error => {
-//         if (error.response) {
-//             switch (error.response.status) {
-//                 case 401:
-//                     // 401 clear token and session
-//                     swal("","Login expired","error").then((val) =>{
-//                         if(val){
-//                             _g.doBeforeLoginout();
-//                             router.replace({
-//                                 path: '/',
-//                                 query: {redirect: router.currentRoute.fullPath}
-//                             })
-//                         }
-//                     });
-                   
-//             }
-//         }
-//         return Promise.reject(error.response)  // return error
-//     });
-
-const baseURL = process.env.NODE_ENV == "development"?"" : process.env.API_ROOT;
+let baseURL =process.env.NODE_ENV =="development"? "": url;
 axios.defaults.baseURL = baseURL;
 
 let apiGet = function(url, object, config) {

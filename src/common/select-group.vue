@@ -3,7 +3,7 @@
         <div>
             <div class="text-center m-t-80">
                 <i class="fa fa-object-group fa-4x  m-b-10 c-primary " ></i>
-                <p>{{$t('common.groupList')}}</p>
+                <p>Group List</p>
                 <el-select v-model="groupValue" ref="devId" class="m-t-10" @change = "groupChange" size="small">
                     <el-option
                         v-for="item in groupOptions"
@@ -17,7 +17,7 @@
         <div v-show="groupValue != ''">
             <div class="text-center m-t-80">
                 <i class="fa fa-tablet fa-5x  m-b-10 c-primary" ></i>
-                <p>{{$t('common.onlineDevices')}}</p>
+                <p>Online Devices</p>
                 <p class="deviceTags">
                     <el-tag size="small" v-for="(item, index) in deviceOptions" :key=index>
                         <span class="standart-icon">

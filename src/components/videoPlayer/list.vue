@@ -12,8 +12,18 @@
                 :isSingleMode="isSingleMode"
                 :isDisabledOffDev="isDisabledOffDev">
                 </select-device>
+                <div class="switchApp">
+                    <span>
+                        Video Player App:
+                    </span>
+                    
+                    <el-switch
+                    v-model="isRunning"
+                    @change="switchSolutionApp()">
+                    </el-switch>
+                </div>
 
-                <div class="text-center">
+                <!-- <div class="text-center">
                     <el-button type="success" size="mini" @click="startVideoApp" class="m-t-30">
                         <i class="fa fa-hourglass-start m-r-5" aria-hidden="true"></i>
                         Start Video Player APP
@@ -25,7 +35,7 @@
                         <i class="fa fa-hourglass-end m-r-5" aria-hidden="true"></i>
                         Stop Video Player App
                     </el-button>
-                </div>
+                </div> -->
 
             </el-col>
 
@@ -65,9 +75,12 @@
                             
                             </div>
                             <div class="fr action">
-                                <i class="fa fa-2x fa-stop-circle c-primary" aria-hidden="true"  v-if="isPlay" @click="pauseDeviceVideo()"></i>
+                                <i class="fa fa-2x fa-pause-circle c-primary" aria-hidden="true"  v-if="isPlay" @click="pauseDeviceVideo()"></i>
                                 <i class="fa fa-2x fa-play-circle c-primary" aria-hidden="true" v-else @click="startDeviceVideo()"></i>
-                                <i class="fa fa-reply reply" aria-hidden="true" @click="restartDeviceVideo()"></i>
+                                <svg t="1578380229599" class="icon reply" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3825" width="20" height="20">
+                                <path d="M816 512a288 288 0 0 1-551.04 117.376l-89.024 36.16A384.064 384.064 0 0 0 912 512 384 384 0 0 0 224 277.376V160H128v256l48 48h224v-96H278.528A288 288 0 0 1 816 512z" fill="#ffffff" p-id="3826"></path>
+                                </svg>
+                                <!-- <i class="fa fa-reply reply" aria-hidden="true" @click="restartDeviceVideo()"></i> -->
                             </div>
                         </div>
                     </div>
@@ -79,13 +92,71 @@
 <style lang="scss">
      @import "../../assets/css/colors";
     
-
-    @-webkit-keyframes rotation{
-        from {-webkit-transform: rotate(0deg);}
-        to {-webkit-transform: rotate(360deg);}
+    @keyframes rotation{
+        from {
+            transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            -webkit-transform: rotate(0deg);
+            }
+        to {
+            transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            }
     }
 
+    @-webkit-keyframes rotation{
+       from {
+            transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            -webkit-transform: rotate(0deg);
+            }
+        to {
+            transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            }
+    }
+
+    @-moz-keyframes rotation{
+        from {
+            transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            -webkit-transform: rotate(0deg);
+            }
+        to {
+            transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            }
+    }
+
+    @-o-keyframes rotation{
+        from {
+            transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            -webkit-transform: rotate(0deg);
+            }
+        to {
+            transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            }
+    }
+
+   
     .imgRotate{
+        transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
         -webkit-transform: rotate(360deg);
         animation: rotation 4s linear infinite;
         -moz-animation: rotation 4s linear infinite;
@@ -100,6 +171,7 @@
             text-align: center;
             width: 110px;
             flex: 0 0 110px;
+            margin-right: 10px;
             p{
                 word-break:break-all;
                 overflow: hidden;
@@ -133,18 +205,20 @@
                     flex: 0 0 80px;
                     margin-left: 10px;
                     i{
-                        margin-left: 5px;
+                        margin-left: 10px;
                         cursor: pointer;
                     }
                     .reply{
                         
                         display: inline-block;
                         color: #fff;
-                        padding: 5px;
+                        padding: 4px;
                         background: $primary-color;
                         border-radius: 50%;
                         position: relative;
-                        top:2px;
+                        top:10px;
+                        margin-left:5px;
+                        cursor: pointer;
                     }
                 }
 
@@ -189,6 +263,16 @@
 
     .el-transfer-panel{
         border: 1px solid #ddd;
+    }
+
+    .switchApp{
+        margin-top: 50px;
+        text-align: center;
+        span{
+            margin-right: 10px;
+            font-weight: 500;
+            color: #303133;
+        }
     }
 
     
@@ -264,7 +348,9 @@ import { clearInterval } from 'timers';
                 },
 
                 timer: null,
-                contentLoading: false
+                contentLoading: false,
+
+                isRunning: false
             }
         },
         components:{
@@ -463,6 +549,10 @@ import { clearInterval } from 'timers';
             },
 
             pauseDeviceVideo(){
+                if(!this.isRunning){
+                    this.$swal("", "Please start video player app", 'info');
+                    return;
+                }
                 let data = {
                     appname: this.pkgname,
                     funcid: this.funcIds.setPause,
@@ -476,6 +566,10 @@ import { clearInterval } from 'timers';
             startDeviceVideo(){
                 if(this.playList.length=== 0){
                     this.$swal("", "Please add the video you want to play to the playlist", 'info');
+                    return;
+                }
+                if(!this.isRunning){
+                    this.$swal("", "Please start video player app", 'info');
                     return;
                 }
 
@@ -495,6 +589,11 @@ import { clearInterval } from 'timers';
                     return;
                 }
 
+                if(!this.isRunning){
+                    this.$swal("", "Please start video player app", 'info');
+                    return;
+                }
+
                 let playlistString = this.playList.join(",");
                 let data = {
                     appname: this.pkgname,
@@ -507,6 +606,11 @@ import { clearInterval } from 'timers';
             setDeviceVideoVolume(){
                 if(this.playList.length=== 0){
                     this.$swal("", "Please add the video you want to play to the playlist", 'info');
+                    return;
+                }
+
+                if(!this.isRunning){
+                    this.$swal("", "Please start video player app", 'info');
                     return;
                 }
 
@@ -563,6 +667,34 @@ import { clearInterval } from 'timers';
                         
                     })
                 })
+            },
+
+            getVideoAppIsRunning(){
+                if(this.selectedAgentId == ""){
+                    console.error("selectAgentId is empty");
+                    return;
+                }
+                this.contentLoading = true;
+                let data= {
+                    appname: this.pkgname,
+                    funcid: "",
+                    param: ""
+                }
+                getDeviceVideoStatus(this.selectedAgentId, appControl.isRunning, data).then((obj) => {
+                    this.contentLoading = false;
+                    handleResponse(obj, (res) => {
+                        if(res.status === "CONTENT"){
+                            this.isRunning = res.content.value == "true"? true: false;
+                        }
+                    })
+                })
+            },
+            switchSolutionApp(){
+               if(this.isRunning){
+                   this.startVideoApp();
+               }else{
+                   this.stopVideoApp();
+               }
             }
 
             
@@ -572,6 +704,7 @@ import { clearInterval } from 'timers';
             selectedAgentId(val){
                 if(val){
                     this.initVideoData();
+                    this.getVideoAppIsRunning();
                     this.getVideoList();
                     this.getVideoStatus();
 
