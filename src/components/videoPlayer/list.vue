@@ -435,6 +435,8 @@ import { clearInterval } from 'timers';
                                                     label: val
                                                 });
                                             })
+                                        }else{
+                                            console.error("[getDeviceVideoStatus]getLocalVideoList: data is not array")
                                         }
 
                                         break;
