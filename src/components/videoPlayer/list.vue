@@ -77,10 +77,9 @@
                             <div class="fr action">
                                 <i class="fa fa-2x fa-pause-circle c-primary" aria-hidden="true"  v-if="isPlay" @click="pauseDeviceVideo()"></i>
                                 <i class="fa fa-2x fa-play-circle c-primary" aria-hidden="true" v-else @click="startDeviceVideo()"></i>
-                                <svg t="1578380229599" class="icon reply" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3825" width="20" height="20">
+                                <svg t="1578380229599" class="icon reply" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3825" width="20" height="20" @click="restartDeviceVideo()">
                                 <path d="M816 512a288 288 0 0 1-551.04 117.376l-89.024 36.16A384.064 384.064 0 0 0 912 512 384 384 0 0 0 224 277.376V160H128v256l48 48h224v-96H278.528A288 288 0 0 1 816 512z" fill="#ffffff" p-id="3826"></path>
                                 </svg>
-                                <!-- <i class="fa fa-reply reply" aria-hidden="true" @click="restartDeviceVideo()"></i> -->
                             </div>
                         </div>
                     </div>

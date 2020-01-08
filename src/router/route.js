@@ -1,20 +1,19 @@
 
-import player from "../components/videoPlayer/list"
+import videoPlayer from "../components/videoPlayer/list"
 import main from '@/components/home'
 
 let childRoute = [
-
     {
-        path: 'player/list',
-        component: player,
-        name: 'playerList',
+        path: 'videoPlayer',
+        component: videoPlayer,
+        name: 'videoPlayer',
         meta: {
-            menuname: "playerList"
+            menuname: "videoPlayer"
         }
     },
     {
         path: '*',
-        redirect:'player/list'
+        redirect:'videoPlayer'
     }
 ]
 let route = [
@@ -24,11 +23,11 @@ let route = [
         name: 'main',
         component: main,
         children: childRoute,
-        redirect:'/main/player/list'    
+        redirect:'/main/videoPlayer'    
     },
     {
         path: '*',
-        redirect:'/'
+        redirect:'/main/videoPlayer'
     }
     
 ]

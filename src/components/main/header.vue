@@ -3,7 +3,6 @@
         <ul class="nav-left" >
             <li @click="collapse()">
                 <img src="@/assets/imgs/player.png" alt="" style="margin-top:-10px;">
-
             </li>
             <li style="margin-top:15px">
                 Video Player
