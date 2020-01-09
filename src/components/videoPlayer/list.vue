@@ -43,6 +43,7 @@
                 <el-transfer 
                 v-model="playList" 
                 :data="allVideoList" 
+                target-order="push"
                 :titles="[videoResource, videoTarget]">
                 </el-transfer>
                 <div class="action-area">
@@ -685,7 +686,13 @@ import { clearInterval } from 'timers';
                     this.contentLoading = false;
                     handleResponse(obj, (res) => {
                         if(res.status === "CONTENT"){
-                            this.isRunning = res.content.value == "true"? true: false;
+                            if(res.content.value == "true"){
+                                this.isRunning = true;
+                                this.getVideoList();
+                                this.getVideoStatus();
+                            }else{
+                                this.isRunning = false;
+                            }
                         }
                     })
                 })
@@ -706,9 +713,6 @@ import { clearInterval } from 'timers';
                 if(val){
                     this.initVideoData();
                     this.getVideoAppIsRunning();
-                    this.getVideoList();
-                    this.getVideoStatus();
-
                 }
             }
         },
