@@ -4,7 +4,7 @@
             <li @click="collapse()">
                 <img src="@/assets/imgs/player.png" alt="" style="margin-top:-10px;">
             </li>
-            <li style="margin-top:15px">
+            <li>
                 Video Player
             </li>
         </ul>
@@ -35,7 +35,7 @@
                     font-size: 1.1rem;
                 }
                 &:nth-child(2){
-                    margin-top: 0.6rem;
+                    margin-top: 0.8rem;
                     font-weight:900; 
                     font-family: 'Microsoft YaHei';
                     font-size: 2.1rem; 
