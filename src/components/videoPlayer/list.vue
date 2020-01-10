@@ -44,7 +44,11 @@
                 v-model="playList" 
                 :data="allVideoList" 
                 target-order="push"
-                :titles="[videoResource, videoTarget]">
+                :titles="[videoResource, videoTarget]"
+                @left-check-change="left_check"
+                >
+                <el-button class="transfer-footer" slot="left-footer" size="small" @click="deleteVideoList()">Delete</el-button>
+                <el-button class="transfer-footer" slot="right-footer" size="small" style="display:none"></el-button>
                 </el-transfer>
                 <div class="action-area">
                     <div class="left-area">
@@ -322,7 +326,7 @@ import { clearInterval } from 'timers';
                 playList: [],
                 isPlay: false,
                 percentage: 0,
-                maxVolume: 42, 
+                maxVolume: 100, 
                 curVolume: 0,
                 //120s/0s play duration
                 curposition:0,
@@ -344,13 +348,15 @@ import { clearInterval } from 'timers';
                     setStart: "set_start",
                     setRestart: "set_restart",
                     setPause: "set_pause",
-                    setVolume: "set_volume"
+                    setVolume: "set_volume",
+                    delLocalVideo: "del_local_video"
                 },
 
                 timer: null,
                 contentLoading: false,
 
-                isRunning: false
+                isRunning: false,
+                left_selected_data: []
             }
         },
         components:{
@@ -373,8 +379,6 @@ import { clearInterval } from 'timers';
                 this.selectedAgentId = "";
                 this.groupname = "";
                 this.selectedAgentsData = [];
-                
-               
             },
 
             initVideoData(){
@@ -384,12 +388,13 @@ import { clearInterval } from 'timers';
                 this.playList= [];
                 this.isPlay= false;
                 this.percentage= 0;
-                this.maxVolume= 42;
+                this.maxVolume= 100;
                 this.curVolume= 0;
                 //120s/0s play duration
                 this.curposition= 0;
                 this.duration= 0;
                 this.palyVideoName= "";
+                this.left_selected_data=[];
             },
 
             changeMode(val){
@@ -481,6 +486,9 @@ import { clearInterval } from 'timers';
                                 console.error("[getDeviceVideoStatus]"+this.funcIds+"#errcode:"+videoObj.errcode);
                             }
                            
+                        }else{
+                            window.clearInterval(this.timer);
+                            this.timer = null;
                         }
                         
                     })
@@ -493,6 +501,7 @@ import { clearInterval } from 'timers';
 
             },
 
+　　　　　　//获取播放视频的播放状态和可以播放的影片
             getVideoStatus(videoObj){
                 this.getDeviceVideoStatus(this.funcIds.getPlayListStatus); 
             },
@@ -501,6 +510,7 @@ import { clearInterval } from 'timers';
                 this.getDeviceVideoStatus(this.funcIds.getVolume);
             },
 
+            //获取正在播放的影片和影片的总时长和当前的时长
             getVideoInfo(videoObj){
                 this.getDeviceVideoStatus(this.funcIds.getVideoInfo);
                 
@@ -537,6 +547,11 @@ import { clearInterval } from 'timers';
                                 break;
                                 case this.funcIds.setVolume:
                                     this.getVideoVolume();
+                                break;
+                                case this.funcIds.delLocalVideo:
+                                    this.$swal("", "Success", "success").then(() => {
+                                        this.getVideoList();
+                                    })
                                 break;
                                 default:
                                     console.error("funcId not support")
@@ -703,6 +718,30 @@ import { clearInterval } from 'timers';
                }else{
                    this.stopVideoApp();
                }
+            },
+
+            deleteVideoList(){
+                if(this.left_selected_data.length=== 0){
+                    this.$swal("", "Please add the video you want to play to the playlist", 'info');
+                    return;
+                }
+                if(!this.isRunning){
+                    this.$swal("", "Please start video player app", 'info');
+                    return;
+                }
+
+                let videolistString = this.left_selected_data.join(",");
+                let data = {
+                    appname: this.pkgname,
+                    funcid: this.funcIds.delLocalVideo,
+                    param: videolistString
+                }
+                this.contentLoading = true;
+                this.setDeviceVideoStatus(data, this.funcIds.delLocalVideo);  
+            },
+
+            left_check(val){
+                this.left_selected_data = val;
             }
 
             
