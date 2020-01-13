@@ -303,7 +303,7 @@
     import 'vue-slider-component/theme/antd.css'
     import handleResponse from '@/components/restfulapi/handleResponse';
     import {appControl} from "../../assets/js/lwm2mMap"
-import { clearInterval } from 'timers';
+    import { clearInterval } from 'timers';
 
 
 
@@ -658,6 +658,7 @@ import { clearInterval } from 'timers';
                             })
                             
                         }else{
+                            this.running = false;
                             _g.handleError(res);
                         }
                     })
@@ -679,6 +680,7 @@ import { clearInterval } from 'timers';
                                 this.initVideoData();
                             })
                         }else{
+                            this.running = true;
                             _g.handleError(res);
                         }
                         
