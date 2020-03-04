@@ -2,7 +2,7 @@
     <div>
         <el-form :model="form" :rules="rules2" ref="form" label-position="left" label-width="0px" class="demo-ruleForm card-box loginform">
             <div class="title">
-                <img src="@/assets/imgs/androidlink.png" alt="">
+                <h1>Video Player</h1>
                 <p>{{$t('login.welcome')}}<br/>{{$t('login.server')}}</p>
             </div>
             <el-form-item prop="username">
@@ -118,7 +118,7 @@
                                         removeLocal("aimlinkData");
                                     }
                                     setSession("aimlinkData", aimlinkData);
-                                    cookie.setCookie("androidLinkToken", res.token, 60);
+                                    cookie.setCookie("videoPlayerToken", res.token, 60);
                                     setSession("username", this.form.username);
                                     let nowTime = this.$moment(new Date().getTime()).format("YYYY-MM-DD HH:mm:ss");
                                     setSession("logintime", nowTime);

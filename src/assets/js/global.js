@@ -127,8 +127,6 @@ const commonFn = {
         }
     },
     timer: null,
-    etimer: null,
-    mtimer: null,
     
 
     removeLetter(str) {
@@ -145,7 +143,13 @@ const commonFn = {
     // trim string
     trim(str){
         return str.replace(/^\s+|\s+$/g,"");
-    }
+    },
+
+    doBeforeLoginout(){
+        cookie.setCookie("videoPlayerToken",'',0);
+        window.clearInterval(_g.timer);
+        _g.timer = null;
+    },
     
 }
 
