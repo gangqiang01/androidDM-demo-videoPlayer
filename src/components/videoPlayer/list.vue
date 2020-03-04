@@ -12,9 +12,12 @@
                 :isSingleMode="isSingleMode"
                 :isDisabledOffDev="isDisabledOffDev">
                 </select-device>
+                <div class="info" v-show="!isInstalled&& isSingleMode&& defIsShow">
+                    Video Player App is not installed
+                </div>
                 <div class="switchApp">
                     <span>
-                        Video Player App:
+                        Video Player App({{versionName}}):
                     </span>
                     
                     <el-switch
@@ -22,20 +25,6 @@
                     @change="switchSolutionApp()">
                     </el-switch>
                 </div>
-
-                <!-- <div class="text-center">
-                    <el-button type="success" size="mini" @click="startVideoApp" class="m-t-30">
-                        <i class="fa fa-hourglass-start m-r-5" aria-hidden="true"></i>
-                        Start Video Player APP
-                    </el-button>
-                    
-                </div>
-                <div class="text-center">
-                    <el-button type="info" size="mini" @click="stopVideoApp" class="m-t-30">
-                        <i class="fa fa-hourglass-end m-r-5" aria-hidden="true"></i>
-                        Stop Video Player App
-                    </el-button>
-                </div> -->
 
             </el-col>
 
@@ -356,7 +345,10 @@
                 contentLoading: false,
 
                 isRunning: false,
-                left_selected_data: []
+                left_selected_data: [],
+                isInstalled: false,
+                defIsShow: false,
+                versionName: ""
             }
         },
         components:{
@@ -658,7 +650,7 @@
                             })
                             
                         }else{
-                            this.running = false;
+                            this.isRunning = false;
                             _g.handleError(res);
                         }
                     })
@@ -680,7 +672,7 @@
                                 this.initVideoData();
                             })
                         }else{
-                            this.running = true;
+                            this.isRunning = true;
                             _g.handleError(res);
                         }
                         
@@ -703,12 +695,18 @@
                     this.contentLoading = false;
                     handleResponse(obj, (res) => {
                         if(res.status === "CONTENT"){
-                            if(res.content.value == "true"){
-                                this.isRunning = true;
-                                this.getVideoList();
-                                this.getVideoStatus();
-                            }else{
-                                this.isRunning = false;
+                            let solutionAppInfo = JSON.parse(res.content.value);
+                            let isInstalled = solutionAppInfo.isInstalled;
+                            let isRunning = solutionAppInfo.isRunning;
+                            let versionName = solutionAppInfo.versionName;
+                            this.isInstalled = isInstalled == "true"? true: false;
+                            if(this.isInstalled){
+                                this.versionName = versionName;
+                                this.isRunning = isRunning == "true"? true: false;
+                                if(this.isRunning){
+                                    this.getVideoList();
+                                    this.getVideoStatus();
+                                }
                             }
                         }
                     })
@@ -753,6 +751,7 @@
             selectedAgentId(val){
                 if(val){
                     this.initVideoData();
+                    this.defIsShow = true;
                     this.getVideoAppIsRunning();
                 }
             }
