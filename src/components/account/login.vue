@@ -188,7 +188,8 @@
 	width: 400px;
 	border: 2px solid #8492A6;
     .login_btn{
-        background: linear-gradient(to right, #91308c 0%,#004889 100%);
+        // background: #1A82C5;
+        background: linear-gradient(to right top,  #1382c6,#004889)
     }
 }
 
