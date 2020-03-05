@@ -15,7 +15,7 @@
                 <div class="info" v-show="!isInstalled&& isSingleMode&& defIsShow">
                     Video Player App is not installed
                 </div>
-                <div class="switchApp">
+                <div class="switchApp" v-show="isSingleMode&& isInstalled&& defIsShow">
                     <span>
                         Video Player App({{versionName}}):
                     </span>
