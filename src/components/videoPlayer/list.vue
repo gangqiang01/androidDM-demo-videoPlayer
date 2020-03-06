@@ -267,6 +267,12 @@
             color: #303133;
         }
     }
+    .info{
+        margin-top: 20px;
+        text-align: center;
+        font-size: 13px;
+        color: #d9534f;
+    }
 
     
 
